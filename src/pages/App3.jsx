@@ -54,12 +54,7 @@ function App3({ goHome, goDetail }) {
 
       {/* grid */}
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "20px",
-          padding:"10px"
-        }}
+        className="grid grid-cols-2 lg:grid-cols-4 gap-5 p-3"
       >
         {animelist.map((anime) => (
           <div
