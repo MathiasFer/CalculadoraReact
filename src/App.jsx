@@ -1,153 +1,49 @@
-import { useState } from "react";
+import { useState } from "react"; 
+import Home from "./pages/Home";
+import App1 from "./pages/App1";
+import App2 from "./pages/App2";
+import App3 from "./pages/App3";
+import Detail from "./pages/Detail";
 
-function App() {
-  // navigation state
+function App (){
   const [screen, setScreen] = useState("home");
+  const [selectedAnime, setSelectedAnime] = useState(null);
 
-  // simple calculator state
-  const [num1, setNum1] = useState("");
-  const [num2, setNum2] = useState("");
-  const [result, setResult] = useState(null);
-
-  // complex calculator state
-  const [display, setDisplay] = useState("");
-
-  // simple calc logic
-  function handleSum() {
-    const res = Number(num1) + Number(num2);
-    setResult(res);
-  }
-
-  // complex calc logic
-  function append(value) {
-    setDisplay((prev) => prev + value); // safe update
-  }
-
-  function clearDisplay() {
-    setDisplay("");
-  }
-
-  function calculate() {
-    try {
-      const res = eval(display); // for learning purposes only
-      setDisplay(res.toString());
-    } catch {
-      setDisplay("Error");
-    }
-  }
-
-  return (
-    <div style={{ textAlign: "center", marginTop: "40px" }}>
+  return(
+    <div className="min-h-screen bg-gray-50 p-6">
       
-      {/* HOME */}
-      {screen === "home" && (
-        <div>
-          <h1>Home</h1>
+      {/* container */}
+      <div className="w-full max-w-[1600px] mx-auto bg-white shadow-md rounded-lg p-6">
+        {screen === "home" && (
+          <Home goTo={setScreen}/>
+        )}
 
-          <button onClick={() => setScreen("simple")}>
-            Simple Calculator
-          </button>
+        {screen === "app1" && (
+          <App1 goHome={() => setScreen("home")} />
+        )}
 
-          <br /><br />
+        {screen === "app2" && (
+          <App2 goHome={() => setScreen("home")} />
+        )}
 
-          <button onClick={() => setScreen("complex")}>
-            Complex Calculator
-          </button>
-        </div>
-      )}
-
-      {/* SIMPLE CALCULATOR */}
-      {screen === "simple" && (
-        <div>
-          <h1>Simple Calculator</h1>
-
-          <input
-            type="number"
-            value={num1}
-            onChange={(e) => setNum1(e.target.value)}
+        {screen === "app3" && (
+          <App3 
+            goHome={() => setScreen("home")}
+            goDetail={(anime)=>{
+              setSelectedAnime(anime);
+              setScreen("detail");
+            }}
           />
+        )}
 
-          <br /><br />
-
-          <input
-            type="number"
-            value={num2}
-            onChange={(e) => setNum2(e.target.value)}
+        {screen === "detail" && (
+          <Detail
+            anime={selectedAnime}
+            goBack={() => setScreen("app3")}
           />
+        )}
 
-          <br /><br />
-
-          <button onClick={handleSum}>Sum</button>
-
-          <br /><br />
-
-          {result !== null && <h2>Result: {result}</h2>}
-
-          <br />
-
-          <button onClick={() => setScreen("home")}>
-            Back
-          </button>
-        </div>
-      )}
-
-      {/* COMPLEX CALCULATOR */}
-      {screen === "complex" && (
-        <div>
-          <h1>Complex Calculator</h1>
-
-          <input
-            type="text"
-            value={display}
-            readOnly
-            style={{ width: "220px", textAlign: "right", fontSize: "18px" }}
-          />
-
-          <br /><br />
-
-          {/* numbers */}
-          <div>
-            {[1,2,3].map(n => (
-              <button key={n} onClick={() => append(n.toString())}>{n}</button>
-            ))}
-          </div>
-          <div>
-            {[4,5,6].map(n => (
-              <button key={n} onClick={() => append(n.toString())}>{n}</button>
-            ))}
-          </div>
-          <div>
-            {[7,8,9].map(n => (
-              <button key={n} onClick={() => append(n.toString())}>{n}</button>
-            ))}
-          </div>
-          <div>
-            <button onClick={() => append("0")}>0</button>
-          </div>
-
-          <br />
-
-          {/* operators */}
-          <div>
-            {["+", "-", "*", "/"].map(op => (
-              <button key={op} onClick={() => append(op)}>{op}</button>
-            ))}
-          </div>
-
-          <br />
-
-          {/* actions */}
-          <button onClick={calculate}>=</button>
-          <button onClick={clearDisplay}>C</button>
-
-          <br /><br />
-
-          <button onClick={() => setScreen("home")}>
-            Back
-          </button>
-        </div>
-      )}
-
+      </div>
     </div>
   );
 }
